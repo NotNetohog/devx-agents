@@ -1,8 +1,8 @@
 # Vercel Agents
 
-Starter project for Vercel Agents. This coding agent is built with AI SDK 5, Vercel AI Gateway, and Vercel Sandbox. It can review GitHub pull requests.
+Starter project for Vercel Agents. This coding agent leverages AI SDK 5, Vercel AI Gateway, and Vercel Sandbox to help you review GitHub pull requests with ease.
 
-It also proposes a structure so you can connect to MCPs, create custom tools, and build new agents in a structured way.
+The project also offers a structured approach for organizing your agents, mcps and custom tools.
 
 ---
 
@@ -10,7 +10,7 @@ It also proposes a structure so you can connect to MCPs, create custom tools, an
 
 ### Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents&env=GITHUB_TOKEN,GITHUB_WEBHOOK_SECRET,LANGUAGE_CODE&project-name=vercel-agents&repository-name=vercel-agents)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents&project-name=vercel-agents&repository-name=vercel-agents)
 
 ---
 
@@ -40,7 +40,7 @@ You must add a webhook at the repository or organization level with the followin
 |------------------------|------------------------------------------|
 | `GITHUB_TOKEN`         | Your GitHub personal access token        |
 | `GITHUB_WEBHOOK_SECRET`| Your webhook secret                      |
-| `LANGUAGE_CODE`        | Language your agent should use (e.g., `en`, `pt-br`) |
+| `LANGUAGE_CODE`        | Language your agent should use (e.g., `en-US`, `es-AR`) |
 
 ---
 
@@ -97,4 +97,4 @@ openai/gpt-4.1
 
 ---
 
-If you want to create new agents, add tools, and connect to MCPs, see the `run_command` tool under `/tools` as an example implementation.
+To create new agents and connect them to MCPs, follow the established project structure. Refer to the `run_command` tool in the `/tools` directory for a practical example of tool implementation.

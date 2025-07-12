@@ -1,7 +1,7 @@
 import { generateText, stepCountIs } from 'ai';
+import { createRunCommandTool } from '../tools/run-command';
 import { CopilotMcpManager } from '../mcps/copilot';
 import { SandboxManager } from '../utils/sandbox';
-
 
 export async function reviewAgent(prompt: string, repoUrl?: string) {
   if (!repoUrl) {
@@ -10,9 +10,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
   const mcpClientManager = new CopilotMcpManager();
   const sandboxManager = new SandboxManager(repoUrl);
 
-  // NEW TOOLS EXAMPLE
-  // THIS IS HOW WOULD YOU PASS THE NEW TOOLS TO YOUR AGENT
-  // const runCommand = createRunCommandTool(() => sandboxManager.getInstance());
+  const runCommand = createRunCommandTool(() => sandboxManager.getInstance());
 
   const systemPrompt = `
     Review the pull request at ${repoUrl}, analyzing only the files and changes included in the PR.
@@ -30,6 +28,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     📝 for nitpicks
     
     If no issues are found, leave a positive and encouraging general comment on the pull request.
+    Remember, you should always use your GitHub tools to comment at least once per pull request.
     Never modify the code.
     `;
 
@@ -43,7 +42,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
       stopWhen: stepCountIs(50),
       tools: {
         ...mcpTools,
-        //runCommand,
+        runCommand,
       },
     });
 

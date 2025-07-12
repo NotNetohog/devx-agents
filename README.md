@@ -1,91 +1,116 @@
-# Vercel Agents
+# ⚡️ Vercel Agents
 
-Starter project for Vercel Agents. This coding agent leverages AI SDK 5, Vercel AI Gateway, and Vercel Sandbox to help you review GitHub pull requests with ease.
+**A powerful starter kit for building AI agents with Vercel.**  
+This project uses **AI SDK 5**, **Vercel Gateway**, and **Vercel Sandbox** to review GitHub pull requests in real-time.
 
-The project also offers a structured approach for organizing your agents, mcps and custom tools.
-
-
-
-## Quick Start
-
-### Deploy
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents&project-name=vercel-agents&repository-name=vercel-agents)
-
-### Add GitHub Webhook
-
-You must add a webhook at the repository or organization level with the following settings:
-
-- **Payload URL**: `<your-vercel-deployed-url>/api/github-review`
-- **Content type**: `application/json`
-- **Secret**: Create a secret value (must match the one added to your project)
-- **Events**: Select individual events → Pull requests
-
-### Create a GitHub Personal Access Token
-
-1. Go to: https://github.com/settings/personal-access-tokens
-2. Set repository access to **All repositories**
-3. Grant the following permissions:
-   - Pull requests: **Read and write**
-
-### Set Environment Variables on Vercel
-
-| Variable               | Description                              |
-|------------------------|------------------------------------------|
-| `GITHUB_TOKEN`         | Your GitHub personal access token        |
-| `GITHUB_WEBHOOK_SECRET`| Your webhook secret                      |
-| `LANGUAGE_CODE`        | Language your agent should use (e.g., `en-US`, `es-AR`) |
-
-
-### Re-deploy
-
-That’s it! Your agent should now be up and running.
+> ✨ Ready to deploy, easy to customize, and built for scale.
 
 ---
 
-## Configuration
+## 🚀 Quick Start
 
-### Per-Repository Rules
+### 1. Deploy to Vercel
 
-If you need specific rules for a repository, create an `agents.md` file in that repo with those rules.
+Click below to deploy instantly:
 
-> There’s an example `agents.md` file in this repo.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents&project-name=vercel-agents&repository-name=vercel-agents)
 
-### AI Model
+### 2. Add a GitHub Webhook
 
-You can easily change the AI model used by editing the agent file.  
-It currently defaults to:
+Add a webhook to your **repo** or **organization**:
+
+- **Payload URL**:  
+  `https://<your-vercel-deployed-url>/api/github-review`
+- **Content type**:  
+  `application/json`
+- **Secret**:  
+  Any value you choose (must match your Vercel env var)
+- **Events**:  
+  Select → **Individual events** → **Pull requests**
+
+### 3. Create a GitHub Personal Access Token
+
+1. Go to: https://github.com/settings/personal-access-tokens
+2. Select **All repositories**
+3. Enable:
+   - `Contents`: Read-only
+   - `Pull requests`: Read and write
+
+### 4. Set Vercel Environment Variables
+
+| Variable                 | Description                                      |
+|--------------------------|--------------------------------------------------|
+| `GITHUB_TOKEN`           | Your GitHub personal access token                |
+| `GITHUB_WEBHOOK_SECRET`  | Your webhook secret                              |
+| `LANGUAGE_CODE`          | Agent's language (e.g. `en-US`, `pt-BR`, `es-AR`)|
+
+Then re-deploy your project.
+
+---
+
+## 🤖 How It Works
+
+When a pull request is opened, your Vercel Agent kicks in and starts the review process.
+
+The agent posts inline comments with clear classifications:
+
+| Emoji  | Type                  |
+|--------|------------------------|
+| 🐛     | Bug                    |
+| 🔐     | Security issue         |
+| 🧼     | Readability suggestion |
+| 🍝     | Complex or tangled code|
+| ✂️     | Dead/unnecessary code  |
+| 📝     | Nitpick                |
+
+Comments are meant to be concise, helpful, and never overengineered.
+
+---
+
+## ⚙️ Configuration
+
+### 🧠 Per-Repo Rules
+
+Want repo-specific behavior?  
+Just add an `agents.md` file to the repo with custom instructions for the agent.
+
+> 📝 A sample `agents.md` is included in this repo.
+
+### 🧠 AI Model Selection
+
+The default AI model is:
 
 ```
 openai/gpt-4.1
 ```
 
----
-
-## Development
-
-1. Clone the repo locally
-2. Install the Vercel CLI:
-   ```bash
-   npm i -g vercel
-   ```
-3. Link to your Vercel project:
-   ```bash
-   vercel link
-   ```
-4. Pull environment variables:
-   ```bash
-   vercel env pull
-   ```
-5. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-6. Start the development server:
-   ```bash
-   vercel dev
-   ```
+You can change it by editing the agent file directly.
 
 ---
 
-To create new agents and connect them to MCPs, follow the established project structure. Refer to the `run_command` tool in the `/tools` directory for a practical example of tool implementation.
+## 🛠️ Development
+
+To run locally:
+
+```bash
+git clone https://github.com/NotNetohog/vercel-agents
+cd vercel-agents
+
+npm i -g vercel          # Install Vercel CLI
+vercel link              # Link to your Vercel project
+vercel env pull .env     # Pull env vars into local .env
+pnpm install             # Install dependencies
+vercel dev               # Start dev server
+```
+
+---
+
+## 🧩 Extending with Agents & Tools
+
+You can build new agents and link them to MCPs using the structured project layout.
+
+Check out the [`/tools/run-command`](./tools/run-command) folder for an example of how to create a tool that runs secure commands in **Vercel Sandbox**.
+
+---
+
+Made with 🧉 by [@netohog](https://x.com/netohog)

@@ -4,7 +4,7 @@ Starter project for Vercel Agents. This coding agent leverages AI SDK 5, Vercel 
 
 The project also offers a structured approach for organizing your agents, mcps and custom tools.
 
----
+
 
 ## Quick Start
 

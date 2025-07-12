@@ -1,6 +1,7 @@
 # ⚡️ Vercel Agents
 
 **A powerful starter kit for building AI agents with Vercel.**  
+
 This project uses **AI SDK 5**, **Vercel Gateway**, and **Vercel Sandbox** to review GitHub pull requests in real-time.
 
 > ✨ Ready to deploy, easy to customize, and built for scale.
@@ -84,7 +85,7 @@ The default AI model is:
 openai/gpt-4.1
 ```
 
-You can change it by editing the agent file directly.
+Thanks to **Vercel Gateway**, you can easily change it by editing the agent file directly.
 
 ---
 
@@ -107,9 +108,9 @@ vercel dev               # Start dev server
 
 ## 🧩 Extending with Agents & Tools
 
-You can build new agents and link them to MCPs using the structured project layout.
+You can build new agents and link them to MCPs and custom tools following the structured project layout.
 
-Check out the [`/tools/run-command`](./tools/run-command) folder for an example of how to create a tool that runs secure commands in **Vercel Sandbox**.
+Check out the [`/tools/run-command`](./src/tools) folder for an example of how to create a tool that runs secure commands in **Vercel Sandbox**.
 
 ---
 

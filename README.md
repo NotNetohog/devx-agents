@@ -2,7 +2,7 @@
 
 ```
     🤖✨ VERCEL AGENTS ✨🤖
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     AI-Powered Code Reviews
     That Actually Help
 ```

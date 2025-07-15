@@ -1,3 +1,4 @@
+import { openai } from '@ai-sdk/openai';
 import { generateText, stepCountIs } from 'ai';
 import { CopilotMcpManager } from '../mcps/copilot';
 import { createRunCommandTool } from '../tools/run-command';
@@ -87,7 +88,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     const mcpTools = await mcpClientManager.getTools();
 
     const result = await generateText({
-      model: 'openai/gpt-4.1',
+      model: openai('gpt-4.1'),
       prompt,
       system: systemPrompt,
       stopWhen: stepCountIs(50),

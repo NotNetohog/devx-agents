@@ -5,7 +5,7 @@ dotenv.config({ path: '.env.local' });
 
 reviewAgent(
   'review the pull request according to your guidelines',
-  'https://github.com/bornlogic/frontend-monorepo/pull/411'
+  'https://github.com/bornlogic/app-studio-mf/pull/729'
 )
   .then(console.log)
   .catch(console.error);

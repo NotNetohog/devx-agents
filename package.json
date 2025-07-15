@@ -4,7 +4,7 @@
   "description": "AI agent framework for improving developer experience",
   "main": "index.js",
   "scripts": {
-    "test": "tsx utils/test.ts"
+    "review": "tsx src/utils/review.ts"
   },
   "keywords": [
     "ai",
@@ -24,6 +24,7 @@
     "ultracite": "5.0.32"
   },
   "dependencies": {
+    "@ai-sdk/openai": "2.0.0-beta.6",
     "@modelcontextprotocol/sdk": "^1.15.1",
     "@vercel/sandbox": "^0.0.10",
     "ai": "5.0.0-beta.14",

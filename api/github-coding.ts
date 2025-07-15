@@ -1,10 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import {
-  CodingAgent,
-  createCodingError,
-  codingRequestSchema,
-} from '../src/agents/coding-agent';
+import { codingAgent } from '../src/agents/coding-agent-ai';
 
 // Request validation schema for API endpoint (no GitHub token required in body)
 const apiRequestSchema = z.object({
@@ -135,14 +131,8 @@ export default async function handler(
 
     let result;
     try {
-      // Create coding agent instance
-      const agent = new CodingAgent(
-        createMockGithubMcp(githubToken),
-        createMockSandboxManager()
-      );
-
-      // Process the coding request
-      result = await agent.processRequest(sanitizedRequest);
+      // Process the coding request using the AI-powered coding agent
+      result = await codingAgent(sanitizedRequest);
 
       // Unregister request on completion
       unregisterActiveRequest(requestId);
@@ -252,27 +242,6 @@ function sanitizeInput(input: string): string {
     .replace(/on\w+=/gi, '') // Remove event handlers
     .trim()
     .substring(0, 10000); // Limit length
-}
-
-/**
- * Create mock GitHub MCP instance
- * TODO: Replace with actual GitHub MCP integration
- */
-function createMockGithubMcp(token: string): unknown {
-  return {
-    token,
-    // Mock implementation - will be replaced with actual GitHub MCP
-  };
-}
-
-/**
- * Create mock sandbox manager instance
- * TODO: Replace with actual sandbox manager integration
- */
-function createMockSandboxManager(): unknown {
-  return {
-    // Mock implementation - will be replaced with actual sandbox manager
-  };
 }
 
 /**

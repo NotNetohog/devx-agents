@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import { codingAgent } from '../src/agents/coding-agent-ai';
+import { codingAgent } from '../src/agents/coding-agent';
 
 // Request validation schema for API endpoint (no GitHub token required in body)
 const apiRequestSchema = z.object({

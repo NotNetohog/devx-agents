@@ -2,6 +2,7 @@ import { generateText, stepCountIs } from 'ai';
 import { CopilotMcpManager } from '../mcps/copilot';
 import { createRunCommandTool } from '../tools/run-command';
 import { SandboxManager } from '../utils/sandbox';
+import { openai } from '@ai-sdk/openai';
 
 // Regex constants for performance
 const GITHUB_REPO_REGEX = /github\.com\/([^/]+)\/([^/]+)/;
@@ -131,7 +132,7 @@ export async function codingAgent(
     const mcpTools = await mcpClientManager.getTools();
 
     const result = await generateText({
-      model: 'openai/gpt-4.1',
+      model: openai('gpt-4.1'),
       prompt: `Please implement the following request: ${prompt}`,
       system: systemPrompt,
       stopWhen: stepCountIs(50),

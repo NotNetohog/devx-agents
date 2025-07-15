@@ -6,7 +6,12 @@
   "scripts": {
     "test": "tsx utils/test.ts"
   },
-  "keywords": ["ai", "agents", "vercel", "mcp"],
+  "keywords": [
+    "ai",
+    "agents",
+    "vercel",
+    "mcp"
+  ],
   "author": "Neto Hog",
   "license": "ISC",
   "devDependencies": {

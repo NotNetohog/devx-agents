@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { reviewAgent } from "../src/agents/review-agent"
+import { reviewAgent } from '../src/agents/review-agent';
 
 export const config = {
   maxDuration: 300, // 5 minutes for background processing

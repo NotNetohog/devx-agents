@@ -11,13 +11,13 @@ Developer Experience
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Deploy](https://img.shields.io/badge/deploy-vercel-black.svg)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fdevx-agents)
 
-**Build AI agents that improve developer experience - starting with intelligent PR reviews**
+**Build AI agents that improve developer experience - featuring intelligent PR reviews and automated code generation**
 
 *Built with AI SDK 5 • Vercel Gateway • Vercel Sandbox*
 
 ---
 
-### 🚀 **Deploy in 60 seconds** • 🧠 **Smart AI reviews** • 🔒 **Secure sandbox execution**
+### 🚀 **Deploy in 60 seconds** • 🧠 **Smart AI reviews** • 🤖 **Automated coding** • 🔒 **Secure sandbox execution**
 
 </div>
 
@@ -25,11 +25,11 @@ Developer Experience
 
 ## ✨ What Makes This Special
 
-| 🎯 **Smart Reviews** | 🚀 **Lightning Fast** | 🔒 **Secure by Design** |
-|---------------------|----------------------|-------------------------|
-| AI analyzes your PRs with context-aware insights | Deploy in under 60 seconds with one click | Runs in isolated Vercel Sandbox environment |
-| Categorizes issues with helpful emoji classifications | Real-time webhook integration | HMAC signature verification |
-| Learns from your codebase patterns | Powered by GPT-4.1 via Vercel Gateway | No code execution on your servers |
+| 🎯 **Smart Reviews** | 🤖 **Code Generation** | 🚀 **Lightning Fast** | 🔒 **Secure by Design** |
+|---------------------|------------------------|----------------------|-------------------------|
+| AI analyzes your PRs with context-aware insights | Generate code from natural language prompts | Deploy in under 60 seconds with one click | Runs in isolated Vercel Sandbox environment |
+| Categorizes issues with helpful emoji classifications | Automatically creates PRs with generated code | Real-time webhook integration | HMAC signature verification |
+| Learns from your codebase patterns | Follows your project's conventions and patterns | Powered by GPT-4.1 via Vercel Gateway | No code execution on your servers |
 
 ### 🎨 **Review Classifications That Actually Help**
 
@@ -89,6 +89,8 @@ Then re-deploy your project.
 
 ## 🤖 How It Works
 
+### 🔍 **PR Review Agent**
+
 When a pull request is opened, your Vercel Agent kicks in and starts the review process.
 
 The agent posts inline comments with clear classifications:
@@ -103,6 +105,47 @@ The agent posts inline comments with clear classifications:
 | 📝     | Nitpick                |
 
 Comments are meant to be concise, helpful, and never overengineered.
+
+### 🤖 **Coding Agent**
+
+The coding agent transforms natural language prompts into working code and automatically creates pull requests:
+
+#### **Workflow:**
+1. **Analyze** → Understands your codebase structure and patterns
+2. **Generate** → Creates code following your project conventions  
+3. **Commit** → Creates a new branch with descriptive commit messages
+4. **PR** → Opens a pull request with detailed change summary
+
+#### **API Usage:**
+
+```bash
+curl -X POST https://your-vercel-url/api/github-coding \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Add a user authentication middleware with JWT validation",
+    "repositoryUrl": "https://github.com/your-org/your-repo",
+    "baseBranch": "main"
+  }'
+```
+
+#### **Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "pullRequestUrl": "https://github.com/your-org/your-repo/pull/123",
+    "branchName": "coding-agent/feat-auth-middleware-1234567890",
+    "summary": "Generated 3 files: middleware, types, and tests"
+  }
+}
+```
+
+#### **Smart Features:**
+- 🧠 **Context-Aware**: Analyzes existing code patterns and follows them
+- 🎯 **Convention Following**: Respects your naming conventions and project structure  
+- 🔄 **Conflict Resolution**: Automatically handles branch name conflicts
+- 🛡️ **Error Recovery**: Retry logic and fallback strategies for reliability
+- 📝 **Detailed PRs**: Comprehensive PR descriptions with change summaries
 
 ---
 

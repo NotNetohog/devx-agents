@@ -1,17 +1,17 @@
 <div align="center">
 
 
-✨ VERCEL AGENTS ✨
+✨ DEVX AGENTS ✨
  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-AI-Powered Code Reviews
-That Actually Help
+AI Agent Framework for
+Developer Experience
 
 
-[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/NotNetohog/vercel-agents)
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/NotNetohog/devx-agents)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Deploy](https://img.shields.io/badge/deploy-vercel-black.svg)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents)
+[![Deploy](https://img.shields.io/badge/deploy-vercel-black.svg)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fdevx-agents)
 
-**Transform your GitHub workflow with intelligent AI agents that review pull requests in real-time**
+**Build AI agents that improve developer experience - starting with intelligent PR reviews**
 
 *Built with AI SDK 5 • Vercel Gateway • Vercel Sandbox*
 
@@ -52,7 +52,7 @@ Your AI agent doesn't just find problems—it categorizes them intelligently:
 
 Click below to deploy instantly:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents&project-name=vercel-agents&repository-name=vercel-agents)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fdevx-agents&project-name=devx-agents&repository-name=devx-agents)
 
 ### 2. Add a GitHub Webhook
 
@@ -132,8 +132,8 @@ Thanks to **Vercel Gateway**, you can easily change it by editing the agent file
 To run locally:
 
 ```bash
-git clone https://github.com/NotNetohog/vercel-agents
-cd vercel-agents
+git clone https://github.com/NotNetohog/devx-agents
+cd devx-agents
 
 npm i -g vercel          # Install Vercel CLI
 vercel link              # Link to your Vercel project

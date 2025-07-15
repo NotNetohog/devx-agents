@@ -1,4 +1,4 @@
-# Agent's Guide to the `vercel-agents` Codebase
+# Agent's Guide to the `devx-agents` Codebase
 
 Welcome, agent! This guide provides you with the essential information to understand and contribute to this project effectively. Please follow these guidelines to ensure your contributions are consistent and high-quality.
 

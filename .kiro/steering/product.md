@@ -1,6 +1,6 @@
 # Product Overview
 
-Vercel Agents is a starter kit for building AI agents that automatically review GitHub pull requests. The system integrates with GitHub webhooks to trigger real-time code reviews using AI models.
+DevX Agents is a framework for building AI agents that improve developer experience. While it ships with a GitHub PR review agent as the primary example, the platform is designed to support any kind of developer-focused automation and tooling.
 
 ## Core Features
 

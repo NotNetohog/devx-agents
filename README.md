@@ -1,10 +1,48 @@
-# ⚡️ Vercel Agents
+<div align="center">
 
-**A powerful starter kit for building AI agents with Vercel.**  
+```
+    🤖✨ VERCEL AGENTS ✨🤖
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    AI-Powered Code Reviews
+    That Actually Help
+```
 
-This project uses **AI SDK 5**, **Vercel Gateway**, and **Vercel Sandbox** to review GitHub pull requests in real-time.
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/NotNetohog/vercel-agents)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Deploy](https://img.shields.io/badge/deploy-vercel-black.svg)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FNotNetohog%2Fvercel-agents)
 
-> ✨ Ready to deploy, easy to customize, and built for scale.
+**Transform your GitHub workflow with intelligent AI agents that review pull requests in real-time**
+
+*Built with AI SDK 5 • Vercel Gateway • Vercel Sandbox*
+
+---
+
+### 🚀 **Deploy in 60 seconds** • 🧠 **Smart AI reviews** • 🔒 **Secure sandbox execution**
+
+</div>
+
+---
+
+## ✨ What Makes This Special
+
+| 🎯 **Smart Reviews** | 🚀 **Lightning Fast** | 🔒 **Secure by Design** |
+|---------------------|----------------------|-------------------------|
+| AI analyzes your PRs with context-aware insights | Deploy in under 60 seconds with one click | Runs in isolated Vercel Sandbox environment |
+| Categorizes issues with helpful emoji classifications | Real-time webhook integration | HMAC signature verification |
+| Learns from your codebase patterns | Powered by GPT-4.1 via Vercel Gateway | No code execution on your servers |
+
+### 🎨 **Review Classifications That Actually Help**
+
+Your AI agent doesn't just find problems—it categorizes them intelligently:
+
+| Classification | What It Catches | Example |
+|---------------|-----------------|---------|
+| 🐛 **Bugs** | Logic errors, null pointer risks, edge cases | `if (user.name = "admin")` → should be `==` |
+| 🔐 **Security** | Vulnerabilities, exposed secrets, unsafe patterns | Hardcoded API keys, SQL injection risks |
+| 🧼 **Readability** | Complex expressions, unclear naming | `const x = getData().filter(y => y.z)` |
+| 🍝 **Complexity** | Nested loops, long functions, tangled logic | 50-line functions with 5 levels of nesting |
+| ✂️ **Dead Code** | Unused imports, unreachable code, redundant logic | Imported libraries never used |
+| 📝 **Nitpicks** | Style preferences, minor improvements | Missing trailing commas, spacing |
 
 ---
 

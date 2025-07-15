@@ -1,10 +1,10 @@
 <div align="center">
 
 ```
-    🤖✨ VERCEL AGENTS ✨🤖
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    AI-Powered Code Reviews
-    That Actually Help
+🤖✨ VERCEL AGENTS ✨🤖
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AI-Powered Code Reviews
+That Actually Help
 ```
 
 [![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/NotNetohog/vercel-agents)

@@ -25,27 +25,6 @@ The agent posts inline comments with clear classifications:
 
 Comments are meant to be concise, helpful, and never overengineered.
 
-### 🤖 **Coding Agent**
-
-The coding agent transforms natural language prompts into working code and automatically creates pull requests:
-
-#### **Workflow:**
-1. **Analyze** → Understands your codebase structure and patterns
-2. **Generate** → Creates code following your project conventions  
-3. **Commit** → Creates a new branch with descriptive commit messages
-4. **PR** → Opens a pull request with detailed change summary
-
-#### **API Usage:**
-
-check docs folder
-
-#### **Smart Features:**
-- 🧠 **Context-Aware**: Analyzes existing code patterns and follows them
-- 🎯 **Convention Following**: Respects your naming conventions and project structure  
-- 🔄 **Conflict Resolution**: Automatically handles branch name conflicts
-- 🛡️ **Error Recovery**: Retry logic and fallback strategies for reliability
-- 📝 **Detailed PRs**: Comprehensive PR descriptions with change summaries
-
 ---
 
 ## ⚙️ Configuration

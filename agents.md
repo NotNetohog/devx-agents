@@ -7,8 +7,7 @@ Welcome, agent! This guide provides you with the essential information to unders
 DevX Agents is a framework for building AI agents that improve developer experience. The project includes:
 
 1. **Review Agent**: Analyzes pull requests and provides intelligent feedback
-2. **Coding Agent**: Generates code from natural language prompts and creates pull requests
-3. **Framework**: Extensible architecture for building custom agents
+2. **Framework**: Extensible architecture for building custom agents
 
 ## Project Structure
 
@@ -16,10 +15,8 @@ Here's an overview of the key directories you'll be working with:
 
 - `/api`: Vercel serverless API endpoints
   - `github-review.ts`: Webhook handler for PR reviews
-  - `github-coding.ts`: API endpoint for code generation requests
 - `/src/agents`: Specialized AI agents 
   - `review-agent.ts`: PR review functionality
-  - `coding-agent.ts`: Code generation and PR creation
 - `/src/mcps`: External model context protocols servers to be attached to agents
 - `/src/tools`: Tools to be attached to agents
 - `/src/utils`: Vercel Sandbox related and general utils files for the project
@@ -48,8 +45,9 @@ When reviewing a pull request, please ensure it meets the following criteria:
 3.  **Tests**: We don't care about tests. Do not suggest or add any tests.
 4.  **Single Responsibility**: PRs should be focused on a single feature, bug fix, or concern.
 
-### Coding Agent
-When generating code, follow these specific guidelines:
+### General Development Guidelines
+
+When contributing to the project, follow these guidelines:
 
 1.  **Project Structure**: Follow the established directory structure
     - Place agents in `/src/agents/`
@@ -64,7 +62,6 @@ When generating code, follow these specific guidelines:
     - Implement proper TypeScript types
 
 3.  **Error Handling**: Use the established error handling patterns
-    - Create structured errors with `createCodingError()`
     - Include actionable suggestions in error messages
     - Implement retry logic for transient failures
     - Use circuit breaker pattern for external services
@@ -76,8 +73,8 @@ When generating code, follow these specific guidelines:
     - Explain complex algorithms or business logic
 
 5.  **File Naming**: Follow the project's naming conventions
-    - Use kebab-case for files: `coding-agent.ts`, `github-review.ts`
-    - Use PascalCase for classes: `CodingAgent`, `ReviewAgent`
+    - Use kebab-case for files: `review-agent.ts`, `github-review.ts`
+    - Use PascalCase for classes: `ReviewAgent`, `SandboxManager`
     - Use camelCase for functions and variables
 
 6.  **Dependencies**: Use the project's established dependencies

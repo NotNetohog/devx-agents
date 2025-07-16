@@ -22,7 +22,11 @@ export class CopilotMcpManager {
           headers: {
             Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
           },
+          // Increased timeout to prevent HeadersTimeoutError
+          signal: AbortSignal.timeout(120000), // 2 minute timeout for initial connection
         },
+        // Additional transport-level timeout settings
+        timeout: 120000, // 2 minutes
       }),
     });
   }

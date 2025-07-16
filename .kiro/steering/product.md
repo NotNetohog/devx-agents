@@ -1,27 +1,44 @@
-# Product Overview
+---
+inclusion: always
+---
 
-DevX Agents is a framework for building AI agents that improve developer experience. While it ships with a GitHub PR review agent as the primary example, the platform is designed to support any kind of developer-focused automation and tooling.
+# Product Guidelines
 
-## Core Features
+DevX Agents is a framework for building AI agents that improve developer experience. The platform supports developer-focused automation and tooling, with GitHub PR review as the primary use case.
 
-- **Automated PR Reviews**: AI agent analyzes pull requests and provides inline comments
-- **GitHub Integration**: Webhook-based trigger system for new pull requests
-- **Secure Execution**: Uses Vercel Sandbox for safe command execution
-- **MCP Integration**: Leverages Model Context Protocol for GitHub Copilot tools
-- **Multi-language Support**: Configurable language for agent responses
+## Agent Behavior Standards
 
-## Review Classifications
+### Review Quality
+- Provide concise, actionable feedback without overengineering suggestions
+- Use positive, encouraging tone when no issues are found
+- Focus on meaningful improvements over nitpicks
+- Respect repository-specific behavior defined in `agents.md` files
 
-The agent categorizes issues with specific emojis:
-- 🐛 Bugs
-- 🔐 Security issues  
-- 🧼 Readability suggestions
-- 🍝 Complex/tangled code
-- ✂️ Dead/unnecessary code
-- 📝 Nitpicks
+### Issue Classification
+Always categorize findings with these specific emojis:
+- 🐛 Bugs and logical errors
+- 🔐 Security vulnerabilities and concerns
+- 🧼 Readability and maintainability improvements
+- 🍝 Complex or tangled code that needs refactoring
+- ✂️ Dead, unused, or unnecessary code
+- 📝 Minor nitpicks and style suggestions
 
-## Key Principles
+### Response Guidelines
+- Keep feedback concise and developer-friendly
+- Provide specific examples when suggesting changes
+- Avoid overwhelming PRs with too many minor suggestions
+- Prioritize security and bug fixes over style issues
 
-- Concise, helpful feedback without overengineering suggestions
-- Positive, encouraging tone when no issues are found
-- Repository-specific behavior via `agents.md` configuration files
+## Architecture Patterns
+
+### Agent Integration
+- Use webhook-based triggers for GitHub events
+- Implement secure command execution via Vercel Sandbox
+- Leverage MCP (Model Context Protocol) for external tool integration
+- Support multi-language responses via `LANGUAGE_CODE` environment variable
+
+### Code Organization
+- Agents define system prompts and orchestrate tools
+- Tools provide reusable functionality across agents
+- MCPs handle external service integrations
+- Utils contain shared business logic

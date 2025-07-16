@@ -1,55 +1,36 @@
-# Technology Stack
+---
+inclusion: always
+---
 
-## Core Technologies
+# Technology Stack & Development Standards
 
-- **Runtime**: Node.js with TypeScript
-- **Package Manager**: pnpm (v10.13.1+)
-- **Build Tool**: tsx for TypeScript execution
-- **Deployment**: Vercel platform
-- **Code Quality**: Biome linter with ultracite config
+## Core Stack
+- **Runtime**: Node.js with TypeScript (strict null checks enabled)
+- **Package Manager**: pnpm (use `pnpm install`, not npm/yarn)
+- **Execution**: tsx for running TypeScript files directly
+- **Deployment**: Vercel serverless functions
+- **Linting**: Biome with ultracite config (must pass before commits)
 
-## Key Dependencies
+## Required Dependencies
+- **AI SDK**: `ai` v5.0.0-beta.14 for model integration
+- **MCP**: `@modelcontextprotocol/sdk` for external tool connections
+- **Sandbox**: `@vercel/sandbox` for secure command execution
+- **Validation**: Zod schemas for all inputs and environment variables
 
-- **AI SDK**: `ai` v5.0.0-beta.14 for AI model integration
-- **MCP**: `@modelcontextprotocol/sdk` for GitHub Copilot integration
-- **Vercel Sandbox**: `@vercel/sandbox` for secure command execution
-- **Validation**: Zod for schema validation
-- **Utilities**: ms for time parsing
-
-## Development Tools
-
-- **TypeScript**: v5.8.3+ with strict null checks enabled
-- **Biome**: v2.0.6 for linting and formatting
-- **tsx**: v4.19.3+ for running TypeScript files
-
-## Common Commands
-
+## Development Commands
 ```bash
-# Install dependencies
-pnpm install
-
-# Run tests
-pnpm test
-
-# Development with Vercel
-vercel dev
-
-# Link to Vercel project
-vercel link
-
-# Pull environment variables
-vercel env pull .env
+pnpm install          # Install dependencies
+vercel dev           # Local development server
+vercel env pull .env # Sync environment variables
 ```
 
-## Environment Variables
+## Environment Setup
+Required variables:
+- `GITHUB_TOKEN`: GitHub API access
+- `GITHUB_WEBHOOK_SECRET`: Webhook HMAC verification
+- `LANGUAGE_CODE`: Response language (en-US, pt-BR, etc.)
 
-Required for deployment:
-- `GITHUB_TOKEN`: GitHub personal access token
-- `GITHUB_WEBHOOK_SECRET`: Webhook verification secret
-- `LANGUAGE_CODE`: Agent response language (e.g., en-US, pt-BR)
-
-## AI Model Configuration
-
+## AI Configuration
 - Default model: `openai/gpt-4.1` via Vercel Gateway
-- Configurable through agent files
-- Step limit: 50 steps per review session
+- 50-step limit per agent execution
+- Configurable per agent implementation

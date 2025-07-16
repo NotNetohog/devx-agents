@@ -32,7 +32,11 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
 
     💬 Commenting Rules
     - Use get_pull_request_files to retrieve the list of changed files and line numbers.
-    - Use add_pull_request_review_comment_to_pending_review to post inline comments only on lines that are directly relevant to the feedback.
+    - For SINGLE LINE issues: Use add_pull_request_review_comment_to_pending_review with the exact line number where the problematic code appears.
+    - For MULTI-LINE issues: Use add_pull_request_review_comment_to_pending_review with start_line and end_line parameters to comment on the entire code block.
+    - CRITICAL: Always identify the exact line range that contains the code being reviewed. Do not comment above, below, or on unrelated lines.
+    - When reviewing a logical block of code (like a multi-line function, conditional, or variable assignment), comment on the entire block using start_line and end_line.
+    - For single problematic statements, comment on just that line.
     - A line is considered valid **only if it contains the symbol, logic, or declaration being commented**.
     - Do not attach comments to unrelated changes just to ensure a comment is placed.
     - If a relevant line does not appear in the diff, skip the comment entirely.

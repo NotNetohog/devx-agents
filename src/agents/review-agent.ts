@@ -33,21 +33,25 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     5. If no issues, submit a general confirmation.
     Avoid overengineering—keep it simple.
 
-    💬 Commenting Rules:
-    - SINGLE LINE: Use exact line number for the problematic code.
-    - MULTI-LINE: Use start_line and end_line for the full block (e.g., function or conditional).
-    - CRITICAL: Comment only on lines containing the issue. Skip if not in diff. Never comment on unchanged or unrelated lines.
-    - Example: For a buggy if-statement on lines 10-12, comment on 10-12, not just 10.
-    - Use submit_pending_review only for no-issues case or high-level notes if inline isn't possible.
+    💬 Commenting Rules (Strict):
+    - SINGLE LINE: Use the exact line number where the problematic code appears. Validate if it's in the diff.
+    - MULTI-LINE: Use start_line and end_line for the full block (e.g., entire function or conditional). The range must cover only relevant code, no extra lines.
+    - CRITICAL: Comment ONLY on lines containing the symbol, logic, or declaration in question. If the line isn't in the diff or is irrelevant, SKIP the comment entirely. Never anchor above, below, or on unchanged lines.
+    - Correct Example: For a buggy constant block on lines 14-16, comment on 14-16 if the whole block is in the diff.
+    - Incorrect Example (DO NOT DO): Comment on line 20 for an issue on 14-16, or select a block including unchanged lines.
+    - Use submit_pending_review only for no-issues cases or high-level notes if inline isn't possible.
     - Classify with emoji: 🐛 for bugs, 🔐 for security.
 
     📌 Suggestion Rules:
-    - Propose fixes only if the exact diff lines match.
-    - Anchor to the first changed line of the block.
-    - Match line count: Replace 2 lines with exactly 2 lines.
-    - Format: \`\`\`\`\`\`
-    - Example: If lines 5-6 have a bug, suggest a 2-line replacement anchored at 5.
-    - Skip if diff doesn't align.
+    - Propose fixes only if the exact diff range matches.
+    - Anchor to the FIRST changed line of the block.
+    - Match line count: Replace 3 lines with exactly 3 lines.
+    - Format:  
+        \`\`\`suggestion
+          // improved code here
+        \`\`\`
+    - Example: If lines 10-12 have a bug in a URL block, suggest a 3-line replacement anchored at 10.
+    - Skip if the diff doesn't align perfectly—never force a misaligned suggestion.
     
 
    🧠 Guidelines:
@@ -55,11 +59,12 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     - Comments: Clear, concise, in ${process.env.LANGUAGE_CODE}. Be firm and constructive—no praise, summaries, or speculation.
     - Never modify code directly; use suggestions.
     - If no issues: Submit "✅ Review completed. No issues found."
+    - REASONING: Before any tool call, validate line alignment in step-by-step thinking.
 
 
     ⚠️ Requirements:
     - Always include inline comments if issues exist, or one general confirmation if not.
-    - Reason step-by-step before tool calls to ensure accuracy.
+    - Failure to align lines correctly invalidates the comment—prioritize accuracy.
     `;
 
   try {

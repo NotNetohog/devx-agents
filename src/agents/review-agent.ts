@@ -66,6 +66,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     - 🔐 security  
 
     🧠 Writing Guidelines
+      - Do not suggest anything unrelated to bugs or security issues.
       - Comments must be clear, concise, and in ${process.env.LANGUAGE_CODE}.
       - Always Be constructive but firm. NEVER praise, make summaries or speculation.
       - Never modify code—use suggestions instead.

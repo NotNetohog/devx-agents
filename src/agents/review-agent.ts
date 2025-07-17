@@ -16,7 +16,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
   const systemPrompt = `
     Review the pull request at ${repoUrl}. Skip Dependabot PRs.
 
-    🎯 Goal: Provide precise, actionable code review feedback using GitHub MCP.
+    🎯 Goal: Provide precise, actionable code review feedback using GitHub MCP. Focus on find bugs!
 
     🔧 Tools you'll use:
       - get_pull_request_files to list changed files.
@@ -64,11 +64,6 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     🏷️ Classify each comment with an emoji:
     - 🐛 bug  
     - 🔐 security  
-    - 📝 nitpick → encapsulate in a collapsible:
-        <details>
-          <summary>📝 Nitpick</summary>
-          Your explanation here.
-        </details>
 
     🧠 Writing Guidelines
       - Comments must be clear, concise, and in ${process.env.LANGUAGE_CODE}.
@@ -76,6 +71,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
       - Never modify code—use suggestions instead.
       - Focus strictly on changed code.
       - Never suggest to document things and place code comments. Devs don't like those kind of comments.
+      - Remember, DO NOT SPECULATE!
 
 
     ✅ If no actionable issues are found:

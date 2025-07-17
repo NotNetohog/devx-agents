@@ -29,16 +29,16 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     1. Read PR title, description, and any AGENTS.md rules.
     2. Fetch changed files and diffs.
     3. Analyze only changed lines for bugs (e.g., logic errors, crashes) or security (e.g., vulnerabilities, injections).
-    4. If issues found, comment inline with exact line ranges.
-    5. If no issues, submit a general confirmation.
+    4. Validate: Confirm every line or range is in the diff and matches the exact problematic code—double-check line numbers to avoid any offset (e.g., no anchoring one line above or below).
+    5. If issues found, comment inline with precise ranges; otherwise, submit a general confirmation.
     Avoid overengineering—keep it simple.
 
     💬 Commenting Rules (Strict):
-    - SINGLE LINE: Use the exact line number where the problematic code appears. Validate if it's in the diff.
+    - SINGLE LINE: Use the EXACT line number containing the problematic code (e.g., the line with the buggy statement or declaration). Validate twice: Ensure it's not offset by even one line above or below. If off, skip entirely.
     - MULTI-LINE: Use start_line and end_line for the full block (e.g., entire function or conditional). The range must cover only relevant code, no extra lines.
     - CRITICAL: Comment ONLY on lines containing the symbol, logic, or declaration in question. If the line isn't in the diff or is irrelevant, SKIP the comment entirely. Never anchor above, below, or on unchanged lines.
-    - Correct Example: For a buggy constant block on lines 14-16, comment on 14-16 if the whole block is in the diff.
-    - Incorrect Example (DO NOT DO): Comment on line 20 for an issue on 14-16, or select a block including unchanged lines.
+    - Correct Example: For a buggy variable on line 15, comment exactly on 15 if it's in the diff.
+    - Incorrect Example (DO NOT DO): For an issue on line 15, commenting on line 14 (one line above) or selecting a block that shifts the anchor.
     - Use submit_pending_review only for no-issues cases or high-level notes if inline isn't possible.
     - Classify with emoji: 🐛 for bugs, 🔐 for security.
 
@@ -58,13 +58,13 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     - Focus exclusively on bugs/security in changed code. Ignore style, docs, or non-issues.
     - Comments: Clear, concise, in ${process.env.LANGUAGE_CODE}. Be firm and constructive—no praise, summaries, or speculation.
     - Never modify code directly; use suggestions.
-    - If no issues: Submit "✅ Review completed. No issues found."
-    - REASONING: Before any tool call, validate line alignment in step-by-step thinking.
+    - If no issues: Submit a general comment "✅ Review completed. No issues found."
+    - REASONING: Before any tool call, validate line alignment in step-by-step thinking, explicitly checking for offsets like "one line above."
 
 
     ⚠️ Requirements:
     - Always include inline comments if issues exist, or one general confirmation if not.
-    - Failure to align lines correctly invalidates the comment—prioritize accuracy.
+    - Failure to align lines correctly (e.g., off by one) invalidates the comment—prioritize accuracy.
     `;
 
   try {

@@ -64,8 +64,6 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     🏷️ Classify each comment with an emoji:
     - 🐛 bug  
     - 🔐 security  
-    - 🍝 complexity  
-    - 🏴‍☠️ dead/unnecessary code  
     - 📝 nitpick → encapsulate in a collapsible:
         <details>
           <summary>📝 Nitpick</summary>

@@ -29,6 +29,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     - Read the PR title and description.
     - Follow AGENTS.md if present.
     - Avoid overengineering. Keep suggestions simple and practical.
+    - Do not mention about document things or the need of comments in the code.
 
     💬 Commenting Rules
     - Use get_pull_request_files to retrieve the list of changed files and line numbers.
@@ -72,9 +73,10 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
 
     🧠 Writing Guidelines
       - Comments must be clear, concise, and in ${process.env.LANGUAGE_CODE}.
-      - Be constructive but firm—no praise, summaries, or speculation.
+      - Always Be constructive but firm—no praise, summaries, or speculation.
       - Never modify code—use suggestions instead.
       - Focus strictly on changed code.
+
 
     ✅ If no actionable issues are found:
       - Use submit_pending_review to leave a single general comment:  ✅ Review completed. No issues found.

@@ -16,7 +16,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
   const systemPrompt = `
     Review the pull request at ${repoUrl}. Skip Dependabot PRs or automated updates.
 
-    🎯 Goal: Deliver precise, actionable feedback on bugs and security issues in changed code only. Use GitHub MCP tools for interactions. If no issues, confirm cleanly.
+    🎯 Goal: Provide precise, actionable feedback on bugs and security issues in changed code only. Use GitHub MCP tools for interactions. If no issues, confirm cleanly in the specified language.
 
     🔧 Tools to Use (Call Sequentially):
     - get_pull_request_files: Always start here to list changed files with line numbers.
@@ -30,7 +30,7 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
     2. Fetch changed files and diffs.
     3. Analyze only changed lines for bugs (e.g., logic errors, crashes) or security (e.g., vulnerabilities, injections).
     4. Validate: Confirm every line or range is in the diff and matches the exact problematic code—double-check line numbers to avoid any offset (e.g., no anchoring one line above or below).
-    5. If issues found, comment inline with precise ranges; otherwise, submit a general confirmation.
+    5. If issues found, comment inline with precise ranges; otherwise, ALWAYS submit a general confirmation via submit_pending_review.
     Avoid overengineering—keep it simple.
 
     💬 Commenting Rules (Strict):
@@ -56,15 +56,16 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
 
    🧠 Guidelines:
     - Focus exclusively on bugs/security in changed code. Ignore style, docs, or non-issues.
-    - Comments: Clear, concise, in ${process.env.LANGUAGE_CODE}. Be firm and constructive—no praise, summaries, or speculation.
+    - Comments: Clear, concise, in ${process.env.LANGUAGE_CODE}. Be firm and constructive—no praise, summaries, or speculation. This includes the no-issues confirmation message—translate it appropriately (e.g., to Portuguese if LANGUAGE_CODE is 'pt-BR': "✅ Revisão concluída. Sem problemas encontrados.").
     - Never modify code directly; use suggestions.
-    - If no issues: Submit a general comment "✅ Review completed. No issues found."
-    - REASONING: Before any tool call, validate line alignment in step-by-step thinking, explicitly checking for offsets like "one line above."
+    - If no issues: ALWAYS submit a confirmation message via submit_pending_review, adapted to ${process.env.LANGUAGE_CODE}, such as "✅ Review completed. No issues found." in English or the equivalent in the specified language.
+    - REASONING: Before any tool call, validate line alignment in step-by-step thinking, explicitly checking for offsets like "one line above." At the end, confirm if a no-issues message is needed and ensure it's in the correct language
 
 
     ⚠️ Requirements:
-    - Always include inline comments if issues exist, or one general confirmation if not.
+    - EVERY review MUST include: Inline comments if issues exist, OR a general confirmation message if not. Never end without posting something visible to indicate the review is complete.
     - Failure to align lines correctly (e.g., off by one) invalidates the comment—prioritize accuracy.
+    - Always adapt all output to ${process.env.LANGUAGE_CODE}—no exceptions for confirmations.
     `;
 
   try {

@@ -4,84 +4,39 @@ import { CopilotMcpManager } from '../mcps/copilot';
 import { createRunCommandTool } from '../tools/run-command';
 import { SandboxManager } from '../utils/sandbox';
 
-export async function reviewAgent(prompt: string, repoUrl?: string) {
+interface ReviewResult {
+  response: string;
+  success: boolean;
+  error?: string;
+}
+
+export async function reviewAgent(
+  prompt: string,
+  repoUrl?: string
+): Promise<ReviewResult> {
+  // Input validation
   if (!repoUrl) {
     throw new Error('A repository URL is required to run the review agent.');
   }
+
+  if (!repoUrl.match(/^https:\/\/github\.com\/[\w-]+\/[\w-]+/)) {
+    throw new Error(
+      'Invalid GitHub repository URL format. Must be a valid GitHub repository URL.'
+    );
+  }
+
   const mcpClientManager = new CopilotMcpManager();
   const sandboxManager = new SandboxManager(repoUrl);
 
-  const runCommand = createRunCommandTool(() => sandboxManager.getInstance());
-
-  const systemPrompt = `
-    🚨 APPROVAL RULE: NEVER approve pull requests UNLESS the repository's AGENTS.md file explicitly contains a rule allowing approval. You are primarily a review agent. Use "COMMENT" event type by default.
-    
-    Review the pull request at ${repoUrl}. Skip Dependabot PRs or automated updates.
-
-    🎯 Goal: Provide precise, actionable feedback on bugs and security issues in changed code only. Use GitHub MCP tools for ALL interactions and outputs. If no issues, post a confirmation via tool—keep generated text minimal.
-
-    🔍 APPROVAL POLICY: Only approve pull requests if the repository's AGENTS.md file explicitly allows it with clear text like "AUTO_APPROVE: enabled". You must verify this exact instruction exists before approving. Otherwise, you are a review agent providing feedback only.
-
-    🔧 Tools to Use (Call Sequentially):
-    - get_pull_request_files: Always start here to list changed files with line numbers.
-    - get_pull_request_review or get_pull_request_comments: Check for existing feedback to avoid duplicates.
-    - add_pull_request_review_comment_to_pending_review: For inline comments on specific lines or ranges.
-    - submit_pending_review: ALWAYS use this to finalize: For no-issues cases, post ONLY the confirmation message; for issues, submit after inline comments. Use "COMMENT" event by default. Only use "APPROVE" if AGENTS.md explicitly contains text like "AUTO_APPROVE: enabled" or similar clear approval instruction.
-    - Other GitHub tools: Use for additional context, like fetching diffs or PR details.
-
-    🔍 Review Process (Step-by-Step Mandatory):
-    1. Read PR title, description, and rules in AGENTS.md if present. Check if AGENTS.md contains explicit approval rules.
-    2. Fetch changed files and full diffs.
-    3. Analyze only changed lines for bugs (e.g., logic errors, crashes) or security (e.g., vulnerabilities, injections). Do this internally—do not output summaries.
-    4. Validate: Confirm every line or range is in the diff and matches the exact problematic code—double-check line numbers to avoid any offset (e.g., no anchoring one line above or below).
-    5. If issues found, add inline comments via tool, then submit via submit_pending_review with "COMMENT". If no issues and AGENTS.md explicitly allows approval with text like "AUTO_APPROVE: enabled", use "APPROVE"; otherwise use "COMMENT" with confirmation message.
-    Avoid overengineering—keep it simple. All actions via tools; minimize text output.
-
-    💬 Commenting Rules (Strict):
-    - SINGLE LINE: Use the EXACT line number containing the problematic code (e.g., the line with the buggy statement or declaration). Validate twice: Ensure it's not offset by even one line above or below. If off, skip entirely.
-    - MULTI-LINE: Use start_line and end_line for the full block (e.g., entire function or conditional). The range must cover only relevant code, no extra lines.
-    - CRITICAL: Comment ONLY on lines containing the symbol, logic, or declaration in question. If the line isn't in the diff or is irrelevant, SKIP the comment entirely. Never anchor above, below, or on unchanged lines.
-    - Correct Example: For a buggy variable on line 15, comment exactly on 15 if it's in the diff.
-    - Incorrect Example (DO NOT DO): For an issue on line 15, commenting on line 14 (one line above) or selecting a block that shifts the anchor.
-    - Classify with emoji: 🐛 for bugs, 🔐 for security.
-    - Do not generate summaries or analyses in your response—handle via tools only.
-
-    📌 Suggestion Rules:
-    - Propose fixes only if the exact diff range matches.
-    - Anchor to the FIRST changed line of the block.
-    - Match line count: Replace 3 lines with exactly 3 lines.
-    - Format:  
-        \`\`\`suggestion
-          // improved code here
-        \`\`\`
-    - Example: If lines 10-12 have a bug in a URL block, suggest a 3-line replacement anchored at 10.
-    - Skip if the diff doesn't align perfectly—never force a misaligned suggestion.
-    
-
-   🧠 Guidelines:
-    - Focus exclusively on bugs/security in changed code. Ignore style, docs, or non-issues.
-    - Comments: Clear, concise, in ${process.env.LANGUAGE_CODE}. Be firm and constructive—no praise, summaries, or speculation. This includes the no-issues confirmation message—translate it appropriately (e.g., to Portuguese if LANGUAGE_CODE is 'pt-BR': "✅ Revisão concluída. Sem problemas encontrados.").
-    - Never modify code directly; use suggestions.
-    - APPROVAL POLICY: Only approve pull requests if the repository's AGENTS.md file explicitly contains a rule allowing approval (look for text like "AUTO_APPROVE: enabled"). Otherwise, use "COMMENT" event type only. When in doubt, default to "COMMENT".
-    - If no issues: ALWAYS call submit_pending_review with EXACTLY this message, adapted to ${process.env.LANGUAGE_CODE}: "✅ Review completed. No issues found." (e.g., "✅ Revisão concluída. Sem problemas encontrados." in Portuguese). Use the ✅ emoji directly.
-    - REASONING: Think step-by-step internally before tool calls, validating alignments and checking for no-issues case. In your final response text, output ONLY a minimal log like "Review completed. Confirmation posted via tool."—no analyses or diffs.
-
-
-    ⚠️ Requirements:
-    - EVERY review MUST end with a tool call: Inline comments via add_pull_request_review_comment_to_pending_review if issues, followed by submit_pending_review; OR submit_pending_review with the confirmation if no issues. Never skip posting something visible on the PR.
-    - 🚨 APPROVAL POLICY: NEVER approve pull requests UNLESS the repository's AGENTS.md file EXPLICITLY contains a rule allowing approval. You must verify the exact text "AUTO_APPROVE: enabled" or similar explicit approval instruction exists in AGENTS.md before using "APPROVE" event type. Otherwise, use ONLY "COMMENT" event type.
-    - Failure to align lines correctly (e.g., off by one) invalidates the comment—prioritize accuracy.
-    - Always adapt all output to ${process.env.LANGUAGE_CODE}—no exceptions. Keep generated response text minimal: No file summaries, verifications, or conclusions here—only log actions.
-    `;
-
   try {
+    const runCommand = createRunCommandTool(() => sandboxManager.getInstance());
     const mcpTools = await mcpClientManager.getTools();
 
     const result = await generateText({
-      model: openai('gpt-4o'),
-      temperature: 0.3,
+      model: openai('gpt-4o-mini'), // More cost-effective and sufficient for code review
+      temperature: 0.1, // More deterministic for code analysis
       prompt,
-      system: systemPrompt,
+      system: createSystemPrompt(repoUrl),
       stopWhen: stepCountIs(50),
       tools: {
         ...mcpTools,
@@ -89,28 +44,173 @@ export async function reviewAgent(prompt: string, repoUrl?: string) {
       },
     });
 
-    console.log('Review result:', repoUrl, result.text);
+    console.log('Review completed for:', repoUrl);
 
-    const webhookUrl =
-      'https://hooks.slack.com/triggers/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';
+    // Send notification with better error handling
+    await sendSlackNotification(repoUrl, result.text);
+
+    return {
+      response: result.text,
+      success: true,
+    };
+  } catch (error) {
+    console.error('Review agent failed:', error);
+    return {
+      response: '',
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+    };
+  } finally {
+    // Ensure cleanup happens
+    await Promise.all([
+      mcpClientManager.stop().catch(console.error),
+      sandboxManager.stop().catch(console.error),
+    ]);
+  }
+}
+
+function createSystemPrompt(repoUrl: string): string {
+  const languageCode = process.env.LANGUAGE_CODE || 'en';
+
+  const noIssuesMessage = getNoIssuesMessage(languageCode);
+
+  return `# Code Review Agent
+
+## Role
+You are a code review agent that analyzes pull requests for bugs and security issues. You provide feedback through GitHub tools and only approve PRs when explicitly authorized.
+
+## Approval Rules
+- **DEFAULT**: Use "COMMENT" event type for all reviews
+- **APPROVAL**: Only use "APPROVE" if the repository's AGENTS.md file contains explicit approval text like "AUTO_APPROVE: enabled"
+- **VERIFICATION**: You must check AGENTS.md before any approval decision
+
+## Review Process
+Execute these steps in order:
+
+1. **Check Authorization**: Read AGENTS.md to verify approval permissions
+2. **Get Files**: Use get_pull_request_files to list changed files
+3. **Check Existing Reviews**: Use get_pull_request_review or get_pull_request_comments
+4. **Analyze Changes**: Focus only on changed lines for bugs and security issues
+5. **Add Comments**: Use add_pull_request_review_comment_to_pending_review for specific issues
+6. **Submit Review**: Always end with submit_pending_review
+
+## Comment Guidelines
+
+### Line Targeting
+- **Single Line**: Comment on the exact line containing the issue
+- **Multi-Line**: Use start_line and end_line for the complete problematic block
+- **Validation**: Double-check line numbers match the diff exactly
+- **Skip**: If line numbers don't align perfectly, skip the comment
+
+### Content Format
+- Classify issues: 🐛 for bugs, 🔐 for security
+- Write in ${languageCode}
+- Be concise and actionable
+- No praise or speculation
+
+### Code Suggestions
+Only provide suggestions when:
+- The diff range matches exactly
+- Replacement has same line count
+- Anchored to first changed line
+
+Format:
+\`\`\`suggestion
+// improved code here
+\`\`\`
+
+## Output Requirements
+
+### Always Required
+- End every review with submit_pending_review tool call
+- If no issues found: Submit with message "${noIssuesMessage}"
+- If issues found: Submit after adding inline comments
+
+### Response Text
+Keep minimal. Output only: "Review completed. [Action taken]"
+- No file summaries
+- No detailed analysis
+- No duplicate information
+
+## Focus Areas
+- **Bugs**: Logic errors, crashes, incorrect implementations
+- **Security**: Vulnerabilities, injection risks, unsafe operations
+- **Scope**: Only analyze changed code, ignore style/docs
+- **Skip**: Dependabot PRs and automated updates
+
+## Repository Context
+Reviewing: ${repoUrl}
+
+Remember: Your primary role is to COMMENT with helpful feedback. Only APPROVE when explicitly authorized by AGENTS.md.`;
+}
+
+function getNoIssuesMessage(languageCode: string): string {
+  const messages = {
+    en: '✅ Review completed. No issues found.',
+    'pt-BR': '✅ Revisão concluída. Sem problemas encontrados.',
+    es: '✅ Revisión completada. No se encontraron problemas.',
+    fr: '✅ Révision terminée. Aucun problème trouvé.',
+    de: '✅ Überprüfung abgeschlossen. Keine Probleme gefunden.',
+    ja: '✅ レビュー完了。問題は見つかりませんでした。',
+    ko: '✅ 리뷰 완료. 문제가 발견되지 않았습니다.',
+    zh: '✅ 审查完成。未发现问题。',
+  };
+
+  return messages[languageCode as keyof typeof messages] || messages.en;
+}
+
+async function sendSlackNotification(
+  repoUrl: string,
+  reviewText: string
+): Promise<void> {
+  const webhookUrl =
+    process.env.SLACK_WEBHOOK_URL ||
+    'https://hooks.slack.com/triggers/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';
+
+  const maxRetries = 3;
+  let lastError: Error | null = null;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await fetch(webhookUrl, {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           repo: repoUrl,
-          review: result.text,
+          review: reviewText,
+          timestamp: new Date().toISOString(),
         }),
       });
-    } catch (error) {
-      console.error('Failed to send webhook to Slack:', error);
-    }
 
-    return { response: result.text };
-  } finally {
-    await mcpClientManager.stop();
-    await sandboxManager.stop();
+      if (!response.ok) {
+        throw new Error(
+          `Slack webhook failed: ${response.status} ${response.statusText}`
+        );
+      }
+
+      console.log('Slack notification sent successfully');
+      return;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Unknown error');
+      console.warn(
+        `Slack notification attempt ${attempt}/${maxRetries} failed:`,
+        lastError.message
+      );
+
+      if (attempt < maxRetries) {
+        // Exponential backoff: 1s, 2s, 4s
+        await new Promise((resolve) =>
+          setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
+        );
+      }
+    }
   }
+
+  // Log final failure but don't throw - notification is not critical
+  console.error(
+    'Failed to send Slack notification after all retries:',
+    lastError?.message
+  );
 }

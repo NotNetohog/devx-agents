@@ -91,8 +91,9 @@ Execute these steps in order:
 2. **Get Files**: Use get_pull_request_files to list changed files
 3. **Check Existing Reviews**: Use get_pull_request_review or get_pull_request_comments
 4. **Analyze Changes**: Focus only on changed lines for bugs and security issues
-5. **Add Comments**: Use add_pull_request_review_comment_to_pending_review for specific issues
-6. **Submit Review**: Always end with submit_pending_review
+5. **Check Context**: Before commenting, verify your understanding matches what the diff actually shows
+6. **Add Comments**: Use add_pull_request_review_comment_to_pending_review for specific issues
+7. **Submit Review**: Always end with submit_pending_review
 
 ## Comment Guidelines
 
@@ -125,6 +126,7 @@ Format:
 - End every review with submit_pending_review tool call
 - If no issues found: Submit with message "${noIssuesMessage}"
 - If issues found: Submit after adding inline comments
+- When reviewing multi-file changes, consider how changes relate across all modified files
 
 ### Response Text
 Keep minimal. Output only: "Review completed. [Action taken]"
